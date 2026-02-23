@@ -19,25 +19,34 @@ def ana_sayfa(request):
     sehir = request.GET.get('sehir', 'Istanbul')
     ulke = ulke_bul(sehir)
 
-    # Ramazan Günü Hesaplama
-    ramazan_baslangic = date(2026, 2, 18) 
+    # Ramazan Günü Hesaplama (aynı kalıyor)
+    ramazan_baslangic = date(2026, 2, 19) 
     bugun = date.today()
     gun_no = (bugun - ramazan_baslangic).days + 1
     index = (gun_no - 1) if 1 <= gun_no <= 30 else 0
 
-    # Ayet ve Hadis Seçimi (Veritabanı -> Data.py önceliğiyle)
     ayet_verisi = gunun_ayeti_getir(gun_no)
-    
-    # Hadis havuzu (Data.py'deki listeyi veya buradaki listeyi kullanabilirsin)
     secili_hadis = HADISLER_LISTESI[index % len(HADISLER_LISTESI)]
 
-    # API'den Günlük Vakitleri Çek
-    url = f"http://api.aladhan.com/v1/timingsByCity?city={sehir}&country={ulke}&method=13"
+    # GÜNCELLEME: Method 13'e ek olarak Turkey/Diyanet spesifik parametreler ekledik
+    # method=13 (Diyanet), school=1 (Hanefi)
+    url = f"http://api.aladhan.com/v1/timingsByCity?city={sehir}&country={ulke}&method=13&school=1"
+    
     vakitler = {}
     try:
         response = requests.get(url, timeout=5)
         if response.status_code == 200:
-            vakitler = response.json().get('data', {}).get('timings', {})
+            ham_vakitler = response.json().get('data', {}).get('timings', {})
+            
+            # İmsak vaktindeki 10 dakikalık farkı düzeltmek için:
+            imsak_vakti = ham_vakitler.get('Imsak')
+            if imsak_vakti:
+                t = datetime.strptime(imsak_vakti, "%H:%M")
+                # Senin bildirdiğin 06:06 -> 06:16 düzeltmesi (+10 dakika)
+                duzeltilmis_imsak = (t + timedelta(minutes=10)).strftime("%H:%M")
+                ham_vakitler['Imsak'] = duzeltilmis_imsak
+            
+            vakitler = ham_vakitler
     except Exception as e:
         print(f"API Hatası: {e}")
         vakitler = None
