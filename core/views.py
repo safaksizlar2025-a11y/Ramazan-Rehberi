@@ -133,3 +133,7 @@ def imsakiye_sayfasi(request):
 def amel_defterim(request):
     # Şimdilik içi boş, sadece sayfayı döndürecek
     return render(request, 'core/amel_defterim.html')
+
+
+def animasyon_sayfasi(request):
+    return render(request, 'core/animasyon.html')

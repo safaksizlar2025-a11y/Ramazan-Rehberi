@@ -15,4 +15,5 @@ urlpatterns = [
     path('imsakiye/', views.imsakiye_sayfasi, name='imsakiye'),
     
     path('amel-defterim/', views.amel_defterim, name='amel_defterim'),
+    path('animasyon/', views.animasyon_sayfasi, name='animasyon'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
