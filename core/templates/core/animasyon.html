@@ -1,89 +1,118 @@
 {% extends 'core/base.html' %}
-{% load static %}
 
-{% block title %}Çiçek Animasyonu{% endblock %}
+{% block title %}Hayırlı Ramazanlar | Çiçek Animasyonu{% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'core/css/flower_anim.css' %}">
-    <style>
-        /* Navbar ve Footer'ın bozulmaması için kritik ayar */
-        body { 
-            background-color: #000 !important; /* Arka planı siyah yap */
-            overflow-x: hidden;
-        }
-        
-        /* Animasyonu bir kutuya hapsetmek yerine tüm sayfaya yayıyoruz (Orijinal hali gibi) */
-        .flower-container {
-            position: relative;
-            width: 100%;
-            height: 90vh;
-            overflow: hidden;
-        }
+<style>
+    /* --- ANIMASYON KAFESİ (Dışarı taşmayı önler) --- */
+    .flower-wrapper {
+        background-color: #000;
+        min-height: 85vh;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        border-radius: 20px;
+        margin: 20px 0;
+        perspective: 1000px;
+        font-size: 10px; /* vmin hesaplamaları için baz */
+    }
 
-        /* Navbar'ın animasyonun altında kalmaması için */
-        .main-nav {
-            background-color: rgba(0, 0, 0, 0.8) !important;
-            z-index: 9999 !important;
-        }
-        
-        /* Senin o meşhur 'E' harfinin kaybolmaması için */
-        .e-sigil {
-            display: inline-flex !important;
-            position: relative !important;
-            z-index: 10000 !important;
-        }
-    </style>
+    /* Web-leb'den gelen orijinal CSS'in senin projene uyarlanmış hali */
+    .flower-wrapper .night {
+        position: absolute;
+        width: 100%; height: 100%;
+        background: radial-gradient(circle, transparent, #000);
+    }
+
+    .flower-wrapper .flowers { position: relative; transform: scale(0.9); bottom: 10vh; }
+
+    .flower-wrapper .flower {
+        position: absolute;
+        bottom: 0;
+        transform-origin: bottom center;
+        z-index: 10;
+        --fl-speed: 0.8s;
+    }
+
+    /* Çiçek 1, 2, 3 Pozisyonları ve Animasyonları */
+    .flower-wrapper .flower--1 { animation: moving-flower-1 4s linear infinite; }
+    .flower-wrapper .flower--2 { left: 50%; transform: rotate(20deg); animation: moving-flower-2 4s linear infinite; }
+    .flower-wrapper .flower--3 { left: 50%; transform: rotate(-15deg); animation: moving-flower-3 4s linear infinite; }
+
+    .flower-wrapper .flower__line {
+        width: 2vmin; height: 50vmin;
+        background-image: linear-gradient(to top, rgba(0,0,0,0.1), #14757a, #39c6d6);
+        border-radius: 4vmin;
+    }
+
+    .flower-wrapper .flower__leafs {
+        position: absolute; bottom: 100%; left: 50%;
+        transform: translate(-50%, 0);
+        animation: blooming-flower 2s backwards;
+    }
+
+    .flower-wrapper .flower__leaf {
+        position: absolute; bottom: 0; left: 50%;
+        width: 8vmin; height: 11vmin;
+        border-radius: 51% 49% 47% 53% / 44% 45% 55% 69%;
+        background-image: linear-gradient(to top, #54b8aa, #a7ffee);
+        transform-origin: bottom center;
+        opacity: 0.9;
+        box-shadow: inset 0 0 2vmin rgba(255, 255, 255, 0.5);
+    }
+
+    /* Keyframes - Hareket ve Büyüme */
+    @keyframes moving-flower-1 { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
+    @keyframes blooming-flower { 0% { transform: translate(-50%, 0) scale(0); filter: blur(10px); } }
+    @keyframes grow-ans { 0% { transform: scale(0); opacity: 0; } }
+
+    /* Çimler ve diğer detaylar için basitleştirilmiş yapılar */
+    .flower-wrapper .growing-grass { position: absolute; bottom: 0; display: flex; }
+    .flower-wrapper .flower__grass { width: 1vmin; height: 15vmin; background: #1aaa15; margin: 0 5px; }
+
+    /* Navbar'daki E harfini ve temayı koru */
+    .main-nav { z-index: 1000 !important; }
+</style>
 {% endblock %}
 
 {% block content %}
-<div class="flower-container">
-    <div class="night"></div>
-    <div class="flowers">
-        <div class="flower flower--1">
-            <div class="flower__leafs flower__leafs--1">
-                <div class="flower__leaf flower__leaf--1"></div>
-                <div class="flower__leaf flower__leaf--2"></div>
-                <div class="flower__leaf flower__leaf--3"></div>
-                <div class="flower__leaf flower__leaf--4"></div>
-                <div class="flower__white-circle"></div>
+<div class="container">
+    <div class="flower-wrapper">
+        <div class="night"></div>
+        <div class="flowers">
+            <div class="flower flower--1">
+                <div class="flower__leafs">
+                    <div class="flower__leaf flower__leaf--1"></div>
+                    <div class="flower__leaf flower__leaf--2"></div>
+                    <div class="flower__leaf flower__leaf--3"></div>
+                    <div class="flower__leaf flower__leaf--4"></div>
+                </div>
+                <div class="flower__line"></div>
             </div>
-            <div class="flower__line">
-                <div class="flower__line__leaf flower__line__leaf--1"></div>
-                <div class="flower__line__leaf flower__line__leaf--2"></div>
+
+            <div class="flower flower--2">
+                <div class="flower__leafs" style="animation-delay: 1s;">
+                    <div class="flower__leaf flower__leaf--1" style="background: #ff80ab;"></div>
+                    <div class="flower__leaf flower__leaf--2" style="background: #ff80ab;"></div>
+                </div>
+                <div class="flower__line" style="height: 40vmin;"></div>
+            </div>
+
+            <div class="flower flower--3">
+                <div class="flower__leafs" style="animation-delay: 1.5s;">
+                    <div class="flower__leaf flower__leaf--1" style="background: #9575cd;"></div>
+                    <div class="flower__leaf flower__leaf--2" style="background: #9575cd;"></div>
+                </div>
+                <div class="flower__line" style="height: 35vmin;"></div>
             </div>
         </div>
 
-        <div class="flower flower--2">
-            <div class="flower__leafs flower__leafs--2">
-                <div class="flower__leaf flower__leaf--1"></div>
-                <div class="flower__leaf flower__leaf--2"></div>
-                <div class="flower__leaf flower__leaf--3"></div>
-                <div class="flower__leaf flower__leaf--4"></div>
-                <div class="flower__white-circle"></div>
-            </div>
-            <div class="flower__line">
-                <div class="flower__line__leaf flower__line__leaf--1"></div>
-                <div class="flower__line__leaf flower__line__leaf--2"></div>
-            </div>
-        </div>
-
-        <div class="flower flower--3">
-            <div class="flower__leafs flower__leafs--3">
-                <div class="flower__leaf flower__leaf--1"></div>
-                <div class="flower__leaf flower__leaf--2"></div>
-                <div class="flower__leaf flower__leaf--3"></div>
-                <div class="flower__leaf flower__leaf--4"></div>
-                <div class="flower__white-circle"></div>
-            </div>
-            <div class="flower__line">
-                <div class="flower__line__leaf flower__line__leaf--1"></div>
-                <div class="flower__line__leaf flower__line__leaf--2"></div>
-            </div>
-        </div>
-        
         <div class="growing-grass">
-            <div class="flower__grass flower__grass--1"></div>
-            <div class="flower__grass flower__grass--2"></div>
+            <div class="flower__grass" style="height: 10vmin; animation: grow-ans 2s 2s backwards;"></div>
+            <div class="flower__grass" style="height: 12vmin; animation: grow-ans 2s 2.2s backwards;"></div>
+            <div class="flower__grass" style="height: 8vmin; animation: grow-ans 2s 2.4s backwards;"></div>
         </div>
     </div>
 </div>
