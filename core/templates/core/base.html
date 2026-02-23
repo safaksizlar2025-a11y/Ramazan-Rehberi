@@ -44,8 +44,11 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link nav-e-link" href="{% url 'animasyon' %}">
-                            <span class="badge bg-success me-1">E</span> Animasyon
+                        <a class="nav-link nav-e-link {% if request.resolver_match.url_name == 'animasyon' %}active{% endif %}" href="{% url 'animasyon' %}">
+                            <span class="e-container">
+                                <span class="e-letter">E</span>
+                                <span class="e-ring"></span>
+                            </span>
                         </a>
                     </li>
                 </ul>
