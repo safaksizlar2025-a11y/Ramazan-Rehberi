@@ -1,88 +1,80 @@
 {% extends 'core/base.html' %}
 
-{% block title %}Hayırlı Ramazanlar | Çiçek Animasyonu{% endblock %}
+{% block title %}Hayırlı Ramazanlar | Animasyon{% endblock %}
 
 {% block extra_css %}
 <style>
-    /* 1. Kapsayıcı: Animasyonun diğer sayfa öğelerine taşmasını engeller */
-    .animation-viewport {
-        width: 100%;
-        height: 85vh;
-        background-color: #0b1016; /* Gece Gökyüzü */
+    /* Animasyonun genel sayfa düzenini bozmasını engellemek için kafes */
+    .flower-body {
+        background-color: #0b1016;
         background-image: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
+        min-height: 85vh; /* Yüksekliği biraz artırdık */
+        border-radius: 20px;
+        margin: 20px 0;
+        display: flex;
+        align-items: flex-end; /* Çiçekleri aşağıya (zemine) yaslar */
+        justify-content: center;
         position: relative;
         overflow: hidden;
-        border-radius: 15px;
-        margin-top: 20px;
+        padding-bottom: 100px; /* Alttan biraz pay bıraktık */
+    }
+
+    /* Tüm çiçek kodlarını .flower-body ile sınırla (Navbar'ı bozmasın) */
+    .flower-body .flowers {
+        position: relative;
         display: flex;
-        align-items: center;
         justify-content: center;
-    }
-
-    /* 2. Redemple332'nin Temel CSS Mantığı (Geliştirilmiş) */
-    .flowers { position: relative; bottom: -150px; }
-    
-    .flower {
-        position: absolute;
-        bottom: 10vmin;
-        transform-origin: bottom center;
+        align-items: flex-end;
         z-index: 10;
-        --fl-speed: 0.8s;
     }
 
-    .flower__line {
+    .flower-body .flower {
+        position: absolute;
+        bottom: 0;
+        transform-origin: bottom center;
+    }
+
+    /* Çiçek çizgisi ve yaprakları (Redemple332 mantığı) */
+    .flower-body .flower__line {
         width: 2vmin;
-        height: 56vmin;
+        height: 50vmin;
         background-image: linear-gradient(to top, rgba(0,0,0,0.1), #14757a, #39c6d6);
-        box-shadow: 0 0 15px rgba(57, 198, 214, 0.3);
         border-radius: 4vmin;
     }
 
-    .flower__leafs {
+    .flower-body .flower__leafs {
         position: absolute;
         bottom: 100%;
-        width: 2vmin; height: 2vmin;
         animation: blooming-flower 2s backwards;
     }
 
-    .flower__leaf {
+    .flower-body .flower__leaf {
         position: absolute;
-        bottom: 0; left: 50%;
-        width: 8vmin; height: 11vmin;
+        bottom: 0;
+        left: 50%;
+        width: 8vmin;
+        height: 11vmin;
         border-radius: 51% 49% 47% 53% / 44% 45% 55% 56%;
         background-image: linear-gradient(to top, #54b8aa, #a7ffee);
         transform-origin: bottom center;
-        opacity: 0.9;
-        box-shadow: inset 0 0 2vmin rgba(255,255,255,0.5);
     }
 
-    /* Yaprakların Farklı Yönlere Açılması */
-    .flower__leaf--1 { transform: translate(-50%, 0) rotate(-20deg); }
-    .flower__leaf--2 { transform: translate(-50%, 0) rotate(20deg); }
-    .flower__leaf--3 { transform: translate(-50%, 0) rotate(-50deg); }
-    .flower__leaf--4 { transform: translate(-50%, 0) rotate(50deg); }
+    /* Yaprak Yönleri */
+    .flower-body .flower__leaf--1 { transform: translate(-50%, 0) rotate(-20deg); }
+    .flower-body .flower__leaf--2 { transform: translate(-50%, 0) rotate(20deg); }
+    .flower-body .flower__leaf--3 { transform: translate(-50%, 0) rotate(-50deg); }
+    .flower-body .flower__leaf--4 { transform: translate(-50%, 0) rotate(50deg); }
 
-    /* 3. Animasyon Tanımları */
     @keyframes blooming-flower {
         0% { transform: scale(0); filter: blur(10px); opacity: 0; }
         100% { transform: scale(1); filter: blur(0); opacity: 1; }
-    }
-
-    /* Gece Işıkları (Küçük parıltılar) */
-    .sparkles {
-        position: absolute;
-        width: 100%; height: 100%;
-        pointer-events: none;
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container text-center py-3">
-    <h2 class="fw-bold mb-1">Ramazan Güzelliği</h2>
-    <p class="text-muted small">Huzur kalbinizde çiçek açsın.</p>
-
-    <div class="animation-viewport">
+<div class="container py-3">
+    <div class="flower-body">
         <div class="flowers">
             <div class="flower flower--1">
                 <div class="flower__leafs">
@@ -93,21 +85,21 @@
                 </div>
                 <div class="flower__line"></div>
             </div>
-
-            <div class="flower flower--2" style="left: -150px; transform: rotate(-15deg) scale(0.8);">
+            
+            <div class="flower flower--2" style="left: -15vmin; transform: rotate(-10deg) scale(0.8);">
                 <div class="flower__leafs" style="animation-delay: 0.5s;">
                     <div class="flower__leaf flower__leaf--1" style="background: #ff80ab;"></div>
                     <div class="flower__leaf flower__leaf--2" style="background: #ff80ab;"></div>
                 </div>
-                <div class="flower__line" style="height: 45vmin;"></div>
+                <div class="flower__line" style="height: 40vmin;"></div>
             </div>
 
-            <div class="flower flower--3" style="left: 150px; transform: rotate(15deg) scale(0.8);">
+            <div class="flower flower--3" style="left: 15vmin; transform: rotate(10deg) scale(0.8);">
                 <div class="flower__leafs" style="animation-delay: 0.8s;">
                     <div class="flower__leaf flower__leaf--1" style="background: #9575cd;"></div>
                     <div class="flower__leaf flower__leaf--2" style="background: #9575cd;"></div>
                 </div>
-                <div class="flower__line" style="height: 45vmin;"></div>
+                <div class="flower__line" style="height: 40vmin;"></div>
             </div>
         </div>
     </div>

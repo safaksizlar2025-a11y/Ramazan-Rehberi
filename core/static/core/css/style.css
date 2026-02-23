@@ -809,3 +809,28 @@ body {
         border: 1px solid var(--nav-border);
     }
 }
+
+/* Navbar'daki E Harfi Mührü */
+.nav-e-link .e-sigil {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background-color: var(--accent-color);
+    color: white !important;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 14px;
+    margin-right: 8px;
+    /* Çakışmaları önlemek için reset */
+    position: relative !important;
+    transform: none !important;
+    animation: none !important; 
+}
+
+/* Sadece üzerine gelince küçük bir hareket */
+.nav-e-link:hover .e-sigil {
+    transform: scale(1.1) !important;
+    box-shadow: 0 0 10px var(--accent-color);
+}
