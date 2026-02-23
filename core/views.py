@@ -70,11 +70,14 @@ def imsakiye_sayfasi(request):
         "Apr": "Nisan"
     }
     
-    # Şubat ve Mart verilerini çekmek için aylar listesi
     ramazan_aylari = [2, 3] 
     imsakiye_listesi = []
     
+    # Zaman düzeltme formatı
+    fmt = "%H:%M"
+
     for ay in ramazan_aylari:
+        # Diyanet metodu (13) ile veriyi çekiyoruz
         url = f"http://api.aladhan.com/v1/calendarByCity/2026/{ay}?city={sehir}&country={ulke}&method=13"
         try:
             response = requests.get(url, timeout=5)
@@ -84,31 +87,34 @@ def imsakiye_sayfasi(request):
                     gun_tarihi_str = gun['date']['gregorian']['date']
                     gun_obj = datetime.strptime(gun_tarihi_str, '%d-%m-%Y').date()
                     
-                    # 18 Şubat'tan öncesini ve 19 Mart'tan (Ramazan sonu) sonrasını ele
+                    # 18 Şubat'tan öncesini ve 19 Mart'tan sonrasını ele
                     if gun_obj < date(2026, 2, 18) or gun_obj > date(2026, 3, 19):
                         continue
 
-                    tarih_ham = gun['date']['readable'] # Örn: "21 Feb 2026"
-                
-                    # İngilizce ay ismini bul ve Türkçesiyle değiştir
-                    tarih_tr = tarih_ham
-                    for eng, tr in aylar_tr.items():
-                        if eng in tarih_ham:
-                            tarih_tr = tarih_ham.replace(eng, tr)
-                            break
-                    
+                    # --- SAAT DÜZELTME BÖLÜMÜ ---
+                    # Ana sayfadakiyle aynı mantığı buradaki listeye de uyguluyoruz
+                    def fix_time(time_str, mins):
+                        # API bazen saat yanına (EET) gibi ekler koyabiliyor, onları temizliyoruz
+                        clean_time = time_str.split(' ')[0]
+                        t = datetime.strptime(clean_time, fmt)
+                        return (t + timedelta(minutes=mins)).strftime(fmt)
+
+                    # API'den gelen ham vakitler
+                    timings = gun['timings']
+
                     imsakiye_listesi.append({
-                        'tarih': tarih_tr,
-                        'imsak': gun['timings']['Imsak'].split(' ')[0],
-                        'gunes': gun['timings']['Sunrise'].split(' ')[0],
-                        'ogle': gun['timings']['Dhuhr'].split(' ')[0],
-                        'ikindi': gun['timings']['Asr'].split(' ')[0],
-                        'aksam': gun['timings']['Maghrib'].split(' ')[0],
-                        'yatsı': gun['timings']['Isha'].split(' ')[0],
+                        'tarih': gun['date']['readable'].replace("Feb", "Şubat").replace("Mar", "Mart"),
+                        'imsak': fix_time(timings['Imsak'], 10),    # +10 dk düzeltme
+                        'gunes': timings['Sunrise'].split(' ')[0], # Güneş aynı kalsın demiştin
+                        'ogle': timings['Dhuhr'].split(' ')[0],    # Öğle aynı kalsın demiştin
+                        'ikindi': fix_time(timings['Asr'], 1),     # +1 dk düzeltme
+                        'aksam': fix_time(timings['Maghrib'], -1),  # -1 dk düzeltme
+                        'yatsı': fix_time(timings['Isha'], -1),    # -1 dk düzeltme
                         'is_today': gun_obj == date.today()
                     })
-        except Exception: continue
-    
+        except Exception as e: 
+            print(f"Hata oluştu: {e}")
+            continue
     return render(request, 'core/imsakiye.html', {'imsakiye': imsakiye_listesi, 'sehir': sehir})
 
 
