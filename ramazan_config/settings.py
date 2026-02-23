@@ -115,18 +115,8 @@ USE_I18N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/6.0/howto/static-files/
-
-# Mevcut STATIC_URL satırını bul ve altını şöyle doldur
+# settings.py en altına ekle
 STATIC_URL = '/static/'
-
-# Railway/Canlı sunucu için bu iki satır çok kritik
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'core/static')] # Statik dosyalarının gerçek yolu
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# Eğer dosyalarını projenin ana dizinindeki 'static' klasörüne koyduysan:
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
