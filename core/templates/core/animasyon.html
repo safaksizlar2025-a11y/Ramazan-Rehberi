@@ -1,148 +1,59 @@
 {% extends 'core/base.html' %}
 
-{% block title %}Ramazan Güzelliği{% endblock %}
+{% block title %}Çiçek Animasyonu{% endblock %}
 
 {% block extra_css %}
 <style>
-    /* Kapsayıcı ve Arka Plan */
-    .flower-frame {
-        background: #0b1016;
-        background-image: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
-        min-height: 80vh;
-        display: flex;
-        align-items: flex-end; /* Çiçekleri zemine yasla */
-        justify-content: center;
+    /* Navbar'daki E harfini ve genel düzeni korumak için izolasyon */
+    .animation-container {
+        all: initial; /* Dışarıdaki tüm CSS'i bu kutu için sıfırla */
+        display: block;
+        width: 100%;
+        height: 80vh;
+        background: #000;
         position: relative;
         overflow: hidden;
-        border-radius: 20px;
+        border-radius: 15px;
         margin-top: 20px;
-        padding-bottom: 15vh; /* Zeminden biraz yukarıda dursunlar */
+        font-family: sans-serif;
     }
 
-    .flowers { position: relative; display: flex; align-items: flex-end; }
+    /* GitHub'daki orijinal CSS'i buraya 'import' ediyoruz */
+    @import url('https://cdn.jsdelivr.net/gh/Redemple332/Flowers-HTML-CSS@main/style.css');
 
-    /* Genel Çiçek Yapısı */
-    .flower {
-        position: absolute;
-        bottom: 0;
-        transform-origin: bottom center;
-        z-index: 10;
-        --fl-speed: 0.8s;
-    }
-
-    /* Çiçek Sapı Animasyonu */
-    .flower__line {
-        width: 2vmin;
-        height: 50vmin;
-        background-image: linear-gradient(to top, rgba(0,0,0,0.1), #14757a, #39c6d6);
-        border-radius: 4vmin;
-        animation: grow-ans 4s linear;
-    }
-
-    /* Çiçek Başlığı (Yaprakların Toplandığı Yer) */
-    .flower__leafs {
-        position: absolute;
-        bottom: 100%;
-        left: 50%;
-        transform: translate(-50%, 0);
-        width: 2vmin; height: 2vmin;
-        animation: blooming-flower 2s 1.5s backwards, flower-sway 4s 3s ease-in-out infinite;
-    }
-
-    /* Yaprak Tasarımı */
-    .flower__leaf {
+    /* Orijinal kodda body'yi siyah yapan kısmı geçersiz kılıp sadece kutumuzu siyah yapıyoruz */
+    .animation-container .flowers {
         position: absolute;
         bottom: 0;
         left: 50%;
-        width: 10vmin;
-        height: 14vmin;
-        border-radius: 50% 50% 50% 50% / 80% 80% 20% 20%;
-        background-image: linear-gradient(to top, #54b8aa, #a7ffee);
-        transform-origin: bottom center;
-        opacity: 0.9;
-        box-shadow: inset 0 0 2vmin rgba(255,255,255,0.5);
-    }
-
-    /* Yaprak Pozisyonları (Açılma Etkisi) */
-    .flower__leaf--1 { transform: translate(-50%, 0) rotate(-25deg); }
-    .flower__leaf--2 { transform: translate(-50%, 0) rotate(25deg); }
-    .flower__leaf--3 { transform: translate(-50%, 0) rotate(-50deg); z-index: 1; }
-    .flower__leaf--4 { transform: translate(-50%, 0) rotate(50deg); z-index: 1; }
-
-    /* ANİMASYONLAR */
-    @keyframes grow-ans {
-        0% { height: 0; opacity: 0; }
-        100% { height: 50vmin; opacity: 1; }
-    }
-
-    @keyframes blooming-flower {
-        0% { transform: translate(-50%, 0) scale(0); filter: blur(10px); }
-        100% { transform: translate(-50%, 0) scale(1); filter: blur(0); }
-    }
-
-    @keyframes flower-sway {
-        0%, 100% { transform: translate(-50%, 0) rotate(-2deg); }
-        50% { transform: translate(-50%, 0) rotate(2deg); }
-    }
-
-    /* Işık Efektleri (Arka planda süzülen noktalar) */
-    .sparkle {
-        position: absolute;
-        width: 1vmin; height: 1vmin;
-        background: #fff;
-        border-radius: 50%;
-        filter: blur(2px);
-        animation: move-sparkle 10s linear infinite;
-    }
-
-    @keyframes move-sparkle {
-        0% { transform: translateY(0) translateX(0); opacity: 0; }
-        50% { opacity: 1; }
-        100% { transform: translateY(-100vh) translateX(20vw); opacity: 0; }
+        transform: translateX(-50%);
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container text-center py-4">
-    <h1 class="display-6 fw-bold">Ramazan Güzelliği</h1>
-    <p class="text-muted small">Her çiçek bir huzur, her huzur bir dua olsun.</p>
-
-    <div class="flower-frame">
-        <div class="sparkle" style="left: 10%; animation-delay: 1s;"></div>
-        <div class="sparkle" style="left: 30%; animation-delay: 5s;"></div>
-        <div class="sparkle" style="left: 70%; animation-delay: 3s;"></div>
-        <div class="sparkle" style="left: 90%; animation-delay: 7s;"></div>
-
+<div class="container py-4">
+    <div class="animation-container">
+        <div class="night"></div>
         <div class="flowers">
             <div class="flower flower--1">
-                <div class="flower__leafs">
+                <div class="flower__leafs flower__leafs--1">
                     <div class="flower__leaf flower__leaf--1"></div>
                     <div class="flower__leaf flower__leaf--2"></div>
                     <div class="flower__leaf flower__leaf--3"></div>
                     <div class="flower__leaf flower__leaf--4"></div>
+                    <div class="flower__white-circle"></div>
                 </div>
-                <div class="flower__line"></div>
-            </div>
-
-            <div class="flower flower--2" style="left: -20vmin; transform: rotate(-15deg) scale(0.8);">
-                <div class="flower__leafs" style="animation-delay: 0.7s;">
-                    <div class="flower__leaf flower__leaf--1" style="background-image: linear-gradient(to top, #ff80ab, #fce4ec);"></div>
-                    <div class="flower__leaf flower__leaf--2" style="background-image: linear-gradient(to top, #ff80ab, #fce4ec);"></div>
-                    <div class="flower__leaf flower__leaf--3" style="background-image: linear-gradient(to top, #ff80ab, #fce4ec);"></div>
+                <div class="flower__line">
+                    <div class="flower__line__leaf flower__line__leaf--1"></div>
+                    <div class="flower__line__leaf flower__line__leaf--2"></div>
+                    <div class="flower__line__leaf flower__line__leaf--3"></div>
+                    <div class="flower__line__leaf flower__line__leaf--4"></div>
+                    <div class="flower__line__leaf flower__line__leaf--5"></div>
+                    <div class="flower__line__leaf flower__line__leaf--6"></div>
                 </div>
-                <div class="flower__line" style="height: 40vmin; animation-duration: 3s;"></div>
             </div>
-
-            <div class="flower flower--3" style="left: 20vmin; transform: rotate(15deg) scale(0.8);">
-                <div class="flower__leafs" style="animation-delay: 1.2s;">
-                    <div class="flower__leaf flower__leaf--1" style="background-image: linear-gradient(to top, #9575cd, #ede7f6);"></div>
-                    <div class="flower__leaf flower__leaf--2" style="background-image: linear-gradient(to top, #9575cd, #ede7f6);"></div>
-                    <div class="flower__leaf flower__leaf--3" style="background-image: linear-gradient(to top, #9575cd, #ede7f6);"></div>
-                </div>
-                <div class="flower__line" style="height: 35vmin; animation-duration: 5s;"></div>
             </div>
-        </div>
     </div>
 </div>
 {% endblock %}
