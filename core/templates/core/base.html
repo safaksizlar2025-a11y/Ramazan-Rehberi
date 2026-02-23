@@ -43,6 +43,11 @@
                             <i class="bi bi-journal-bookmark-fill"></i> Amel Defterim
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-e-link {% if request.resolver_match.url_name == 'animasyon' %}active{% endif %}" href="{% url 'animasyon' %}" aria-label="E Animasyon">
+                            <span class="e-sigil" aria-hidden="true">E</span> Animasyon
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

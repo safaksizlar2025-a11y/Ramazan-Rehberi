@@ -455,6 +455,48 @@ body {
     background: rgba(255, 255, 255, 0.1);
 }
 
+.nav-e-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.e-sigil {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #ffffff;
+    background: linear-gradient(135deg, #198754, #1e3a5f);
+    box-shadow: 0 0 0 0 rgba(25, 135, 84, 0.45);
+    animation: ePulse 2.2s ease-in-out infinite;
+}
+
+.nav-e-link:hover .e-sigil,
+.nav-e-link.active .e-sigil {
+    background: linear-gradient(135deg, #2ecc71, #2f80ed);
+}
+
+@keyframes ePulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(25, 135, 84, 0.45);
+    }
+    70% {
+        transform: scale(1.06);
+        box-shadow: 0 0 0 8px rgba(25, 135, 84, 0);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(25, 135, 84, 0);
+    }
+}
+
 .tiny-badge {
     font-size: 0.65rem;
     padding: 2px 6px;
