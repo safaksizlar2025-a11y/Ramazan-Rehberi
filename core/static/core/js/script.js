@@ -25,12 +25,11 @@ function parseTimeString(timeStr) {
 }
 
 function timeStringToDate(timeStr) {
-    const parsed = parseTimeString(timeStr);
-    if (!parsed) return null;
-
-    const date = new Date();
-    date.setHours(parsed.hours, parsed.minutes, 0, 0);
-    return date;
+    if (!timeStr) return null;
+    const [hours, minutes] = timeStr.split(':').map(Number);
+    const d = new Date();
+    d.setHours(hours, minutes, 0, 0);
+    return d;
 }
 
 function formatCountdown(ms) {
@@ -124,7 +123,7 @@ function sayaciGuncelle(vakitler) {
     // Label ve Geri Sayım
     labelElement.innerText = metin;
     if (isMessageMode) {
-        sayacElement.innerHTML = '<span class="text-success" style="font-size: 0.7em;">Hayırlı İftarlar</span>';
+        sayacElement.innerHTML = '<span class="text-success" style="font-size: 0.5em; display: block; line-height: 1;">Hayırlı İftarlar</span>';
     } else {
         const fark = hedefVakit - simdi;
         sayacElement.innerText = formatCountdown(fark);
@@ -264,16 +263,18 @@ function akilliSayac() {
 
     // Vakitleri HTML id'lerinden çekiyoruz
     const vakitler = {
-        imsak: document.getElementById('vakit-imsak')?.innerText,
-        ogle: document.getElementById('vakit-ogle')?.innerText,
-        ikindi: document.getElementById('vakit-ikindi')?.innerText,
-        aksam: document.getElementById('vakit-aksam')?.innerText,
-        yatsi: document.getElementById('vakit-yatsi')?.innerText
+        imsak: document.getElementById('vakit-imsak-deger')?.innerText.trim(),
+        ogle: document.getElementById('vakit-ogle-deger')?.innerText.trim(),
+        ikindi: document.getElementById('vakit-ikindi-deger')?.innerText.trim(),
+        aksam: document.getElementById('vakit-aksam-deger')?.innerText.trim(),
+        yatsi: document.getElementById('vakit-yatsi-deger')?.innerText.trim()
     };
 
     const simdi = new Date();
     let hedefVakit = null;
     let hedefIsmi = "";
+
+    if (!vakitler.imsak || !vakitler.aksam) return;
 
     // İftar (Akşam) vakti kontrolü
     if (vakitler.aksam) {
@@ -296,4 +297,6 @@ function akilliSayac() {
             sayacEl.innerText = "00:00:00";
         }
     }
+
+    sayaciGuncelle(vakitler);
 }

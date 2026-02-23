@@ -68,16 +68,42 @@
 
     <div class="row g-2 g-md-3 mb-5 vakit-konteyner">
         {% if vakitler %}
-            {% with vakit_listesi=vakitler.items %}
-                <div class="row g-3 text-center">
-                    <div class="col">İmsak <br> <span id="vakit-imsak" class="fw-bold">{{ vakitler.Imsak }}</span></div>
-                    <div class="col">Güneş <br> <span id="vakit-gunes" class="fw-bold">{{ vakitler.Sunrise }}</span></div>
-                    <div class="col">Öğle <br> <span id="vakit-ogle" class="fw-bold">{{ vakitler.Dhuhr }}</span></div>
-                    <div class="col">İkindi <br> <span id="vakit-ikindi" class="fw-bold">{{ vakitler.Asr }}</span></div>
-                    <div class="col">Akşam <br> <span id="vakit-aksam" class="fw-bold">{{ vakitler.Maghrib }}</span></div>
-                    <div class="col">Yatsı <br> <span id="vakit-yatsi" class="fw-bold">{{ vakitler.Isha }}</span></div>
+            <div class="col-4 col-md-2">
+                <div class="vakit-kart" id="vakit-Fajr">
+                    <span class="vakit-ad">İmsak</span>
+                    <span id="vakit-imsak-deger" class="vakit-saat">{{ vakitler.Imsak }}</span>
                 </div>
-            {% endwith %}
+            </div>
+            <div class="col-4 col-md-2">
+                <div class="vakit-kart" id="vakit-Sunrise">
+                    <span class="vakit-ad">Güneş</span>
+                    <span id="vakit-gunes-deger" class="vakit-saat">{{ vakitler.Sunrise }}</span>
+                </div>
+            </div>
+            <div class="col-4 col-md-2">
+                <div class="vakit-kart" id="vakit-Dhuhr">
+                    <span class="vakit-ad">Öğle</span>
+                    <span id="vakit-ogle-deger" class="vakit-saat">{{ vakitler.Dhuhr }}</span>
+                </div>
+            </div>
+            <div class="col-4 col-md-2">
+                <div class="vakit-kart" id="vakit-Asr">
+                    <span class="vakit-ad">İkindi</span>
+                    <span id="vakit-ikindi-deger" class="vakit-saat">{{ vakitler.Asr }}</span>
+                </div>
+            </div>
+            <div class="col-4 col-md-2">
+                <div class="vakit-kart" id="vakit-Maghrib">
+                    <span class="vakit-ad">Akşam</span>
+                    <span id="vakit-aksam-deger" class="vakit-saat">{{ vakitler.Maghrib }}</span>
+                </div>
+            </div>
+            <div class="col-4 col-md-2">
+                <div class="vakit-kart" id="vakit-Isha">
+                    <span class="vakit-ad">Yatsı</span>
+                    <span id="vakit-yatsi-deger" class="vakit-saat">{{ vakitler.Isha }}</span>
+                </div>
+            </div>
         {% endif %}
     </div>
 
