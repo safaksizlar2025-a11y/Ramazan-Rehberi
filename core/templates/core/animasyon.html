@@ -1,51 +1,55 @@
 {% extends 'core/base.html' %}
 
-{% block title %}Çiçek Animasyonu{% endblock %}
+{% block title %}Hayırlı Ramazanlar | Animasyon{% endblock %}
 
 {% block extra_css %}
 <style>
-    /* Animasyonun senin projenin renkleriyle çakışmaması için kapsayıcı (wrapper) */
-    .flower-animation-wrapper {
-        background-color: #0b1016; /* Gece gökyüzü rengi */
+    /* Projenin genel yapısını bozmamak için sadece bu alana özel siyah arka plan */
+    .flower-frame {
+        background-image: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
         min-height: 80vh;
         display: flex;
         align-items: center;
         justify-content: center;
-        overflow: hidden;
         border-radius: 20px;
+        overflow: hidden;
         position: relative;
-        margin-top: 20px;
+        margin: 20px 0;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
-    /* Buraya Redemple332'nin uzun CSS kodlarının özeti gelecek */
-    /* Ana yapıyı korumak için gerekli temel stiller: */
+    /* Çiçeklerin Temel Kodları */
     .flowers { position: relative; transform: scale(0.9); }
-    .flower { position: absolute; bottom: 10vmin; transform-origin: bottom center; z-index: 10; }
+    .flower { position: absolute; bottom: 10vmin; transform-origin: bottom center; z-index: 10; --fl-speed: 0.8s; }
     
-    /* Çiçek 1, 2, 3 ve yaprak animasyonları (Özetlenmiş halidir, tam halini ekleyebilirsin) */
-    .flower--1 { animation: moving-flower-1 4s linear infinite; }
     .flower__leafs { animation: blooming-flower 2s backwards; }
+    .flower__leafs--1 { animation-delay: 1.1s; }
     
+    .flower__leaf {
+        position: absolute; bottom: 100%; left: 50%; transform-origin: bottom center;
+        width: 8vmin; height: 11vmin; border-radius: 51% 49% 47% 53% / 44% 45% 55% 56%;
+        background-image: linear-gradient(to top, #54b8aa, #a7ffee);
+    }
+
+    .flower__line { width: 2vmin; height: 50vmin; background-image: linear-gradient(to left, rgba(0,0,0,0.2), transparent, rgba(255,255,255,0.2)), linear-gradient(to top, transparent 10%, #14757a, #39c6d6); border-radius: 4vmin; }
+
     @keyframes blooming-flower {
         0% { transform: scale(0); filter: blur(10px); opacity: 0; }
     }
-    
-    /* Gece efektleri */
-    .night { position: absolute; width: 100%; height: 100%; background: radial-gradient(circle, transparent, #000); }
 
-    /* Redemple332'nin tam CSS kodunu buraya <style> etiketleri arasına ekleyebilirsin */
+    /* Redemple332'nin tüm çiçek animasyonu buraya gelecek şekilde kapsayıcı yapılmıştır */
+    /* Navbar'daki E harfi için yazdığımız animasyonla çakışmaz */
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container py-5">
+<div class="container py-4">
     <div class="text-center mb-4">
-        <h2 class="fw-bold">Hayırlı Ramazanlar</h2>
-        <p class="opacity-75">Ramazan'ın huzuru kalbinizde çiçek açsın.</p>
+        <h2 class="display-6 fw-bold">Ramazan Huzuru</h2>
+        <p class="text-muted">Bu özel animasyon sizin için hazırlandı.</p>
     </div>
 
-    <div class="flower-animation-wrapper">
-        <div class="night"></div>
+    <div class="flower-frame">
         <div class="flowers">
             <div class="flower flower--1">
                 <div class="flower__leafs flower__leafs--1">
@@ -53,11 +57,24 @@
                     <div class="flower__leaf flower__leaf--2"></div>
                     <div class="flower__leaf flower__leaf--3"></div>
                     <div class="flower__leaf flower__leaf--4"></div>
-                    <div class="flower__white-circle"></div>
                 </div>
                 <div class="flower__line"></div>
             </div>
+            
+            <div class="flower flower--2" style="left: 15vmin; transform: rotate(10deg); --fl-speed: 1.2s;">
+                <div class="flower__leafs flower__leafs--2">
+                    <div class="flower__leaf flower__leaf--1" style="background: #ff80ab;"></div>
+                    <div class="flower__leaf flower__leaf--2" style="background: #ff80ab;"></div>
+                </div>
+                <div class="flower__line" style="height: 40vmin;"></div>
             </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{% url 'ana_sayfa' %}" class="btn btn-outline-success rounded-pill px-4">
+            <i class="bi bi-house-door me-2"></i>Ana Sayfaya Dön
+        </a>
     </div>
 </div>
 {% endblock %}
