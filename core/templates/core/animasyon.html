@@ -4,56 +4,84 @@
 
 {% block extra_css %}
 <style>
-    /* Navbar'daki E harfini ve genel düzeni korumak için izolasyon */
-    .animation-container {
-        all: initial; /* Dışarıdaki tüm CSS'i bu kutu için sıfırla */
-        display: block;
-        width: 100%;
-        height: 80vh;
-        background: #000;
+    /* Kapsayıcı: Navbar'ı ve genel tasarımı korur */
+    .animation-wrapper {
+        background-color: #000;
+        min-height: 80vh;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
         position: relative;
         overflow: hidden;
-        border-radius: 15px;
-        margin-top: 20px;
-        font-family: sans-serif;
+        border-radius: 20px;
+        margin: 20px 0;
     }
 
-    /* GitHub'daki orijinal CSS'i buraya 'import' ediyoruz */
-    @import url('https://cdn.jsdelivr.net/gh/Redemple332/Flowers-HTML-CSS@main/style.css');
-
-    /* Orijinal kodda body'yi siyah yapan kısmı geçersiz kılıp sadece kutumuzu siyah yapıyoruz */
-    .animation-container .flowers {
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
+    /* GitHub'daki orijinal animasyon kodlarının tam entegrasyonu */
+    :root {
+        --color-bg: #000;
+        --color-glass: rgba(255, 255, 255, 0.1);
     }
+
+    .flowers { position: relative; display: flex; align-items: flex-end; }
+    .flower { position: absolute; bottom: 10vmin; transform-origin: bottom center; z-index: 10; }
+
+    .flower__line {
+        width: 2vmin; height: 50vmin;
+        background-image: linear-gradient(to top, rgba(0,0,0,0.1), #14757a, #39c6d6);
+        border-radius: 4vmin;
+        animation: grow-line 4s linear;
+    }
+
+    .flower__leafs {
+        position: absolute; bottom: 100%; left: 50%; transform: translate(-50%, 0);
+        animation: blooming-flower 2s 1.5s backwards;
+    }
+
+    .flower__leaf {
+        position: absolute; bottom: 0; left: 50%; width: 8vmin; height: 11vmin;
+        border-radius: 51% 49% 47% 53% / 44% 45% 55% 56%;
+        background-image: linear-gradient(to top, #54b8aa, #a7ffee);
+        transform-origin: bottom center; opacity: 0.9;
+    }
+
+    .flower__leaf--1 { transform: translate(-50%, 0) rotate(-20deg); }
+    .flower__leaf--2 { transform: translate(-50%, 0) rotate(20deg); }
+    .flower__leaf--3 { transform: translate(-50%, 0) rotate(-50deg); }
+    .flower__leaf--4 { transform: translate(-50%, 0) rotate(50deg); }
+
+    .night { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, transparent, #000); }
+
+    @keyframes grow-line { 0% { height: 0; opacity: 0; } 100% { height: 50vmin; opacity: 1; } }
+    @keyframes blooming-flower { 0% { transform: translate(-50%, 0) scale(0); filter: blur(10px); } 100% { transform: translate(-50%, 0) scale(1); filter: blur(0); } }
+
+    /* Navbar'daki E Harfini Korumak İçin Fix */
+    .main-nav { z-index: 1000 !important; }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container py-4">
-    <div class="animation-container">
+<div class="container py-3">
+    <div class="animation-wrapper">
         <div class="night"></div>
         <div class="flowers">
             <div class="flower flower--1">
-                <div class="flower__leafs flower__leafs--1">
+                <div class="flower__leafs">
                     <div class="flower__leaf flower__leaf--1"></div>
                     <div class="flower__leaf flower__leaf--2"></div>
                     <div class="flower__leaf flower__leaf--3"></div>
                     <div class="flower__leaf flower__leaf--4"></div>
-                    <div class="flower__white-circle"></div>
                 </div>
-                <div class="flower__line">
-                    <div class="flower__line__leaf flower__line__leaf--1"></div>
-                    <div class="flower__line__leaf flower__line__leaf--2"></div>
-                    <div class="flower__line__leaf flower__line__leaf--3"></div>
-                    <div class="flower__line__leaf flower__line__leaf--4"></div>
-                    <div class="flower__line__leaf flower__line__leaf--5"></div>
-                    <div class="flower__line__leaf flower__line__leaf--6"></div>
+                <div class="flower__line"></div>
+            </div>
+            <div class="flower flower--2" style="left: 15vmin; transform: scale(0.8) rotate(10deg);">
+                <div class="flower__leafs" style="animation-delay: 2s;">
+                    <div class="flower__leaf flower__leaf--1" style="background: #ff80ab;"></div>
+                    <div class="flower__leaf flower__leaf--2" style="background: #ff80ab;"></div>
                 </div>
+                <div class="flower__line" style="height: 40vmin; animation-duration: 3s;"></div>
             </div>
-            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
