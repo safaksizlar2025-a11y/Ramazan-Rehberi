@@ -1,7 +1,63 @@
 {% extends 'core/base.html' %}
 
-{% block title %}Animasyon{% endblock %}
+{% block title %}Çiçek Animasyonu{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Animasyonun senin projenin renkleriyle çakışmaması için kapsayıcı (wrapper) */
+    .flower-animation-wrapper {
+        background-color: #0b1016; /* Gece gökyüzü rengi */
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border-radius: 20px;
+        position: relative;
+        margin-top: 20px;
+    }
+
+    /* Buraya Redemple332'nin uzun CSS kodlarının özeti gelecek */
+    /* Ana yapıyı korumak için gerekli temel stiller: */
+    .flowers { position: relative; transform: scale(0.9); }
+    .flower { position: absolute; bottom: 10vmin; transform-origin: bottom center; z-index: 10; }
+    
+    /* Çiçek 1, 2, 3 ve yaprak animasyonları (Özetlenmiş halidir, tam halini ekleyebilirsin) */
+    .flower--1 { animation: moving-flower-1 4s linear infinite; }
+    .flower__leafs { animation: blooming-flower 2s backwards; }
+    
+    @keyframes blooming-flower {
+        0% { transform: scale(0); filter: blur(10px); opacity: 0; }
+    }
+    
+    /* Gece efektleri */
+    .night { position: absolute; width: 100%; height: 100%; background: radial-gradient(circle, transparent, #000); }
+
+    /* Redemple332'nin tam CSS kodunu buraya <style> etiketleri arasına ekleyebilirsin */
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="container py-5 mt-5"></div>
+<div class="container py-5">
+    <div class="text-center mb-4">
+        <h2 class="fw-bold">Hayırlı Ramazanlar</h2>
+        <p class="opacity-75">Ramazan'ın huzuru kalbinizde çiçek açsın.</p>
+    </div>
+
+    <div class="flower-animation-wrapper">
+        <div class="night"></div>
+        <div class="flowers">
+            <div class="flower flower--1">
+                <div class="flower__leafs flower__leafs--1">
+                    <div class="flower__leaf flower__leaf--1"></div>
+                    <div class="flower__leaf flower__leaf--2"></div>
+                    <div class="flower__leaf flower__leaf--3"></div>
+                    <div class="flower__leaf flower__leaf--4"></div>
+                    <div class="flower__white-circle"></div>
+                </div>
+                <div class="flower__line"></div>
+            </div>
+            </div>
+    </div>
+</div>
 {% endblock %}
