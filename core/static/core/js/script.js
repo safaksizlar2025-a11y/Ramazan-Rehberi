@@ -257,3 +257,43 @@ function formatTime(ms) {
     const s = (totalSeconds % 60).toString().padStart(2, '0');
     return `${h}:${m}:${s}`;
 }
+
+function akilliSayac() {
+    const sayacEl = document.getElementById('sayac');
+    if (!sayacEl) return;
+
+    // Vakitleri HTML id'lerinden çekiyoruz
+    const vakitler = {
+        imsak: document.getElementById('vakit-imsak')?.innerText,
+        ogle: document.getElementById('vakit-ogle')?.innerText,
+        ikindi: document.getElementById('vakit-ikindi')?.innerText,
+        aksam: document.getElementById('vakit-aksam')?.innerText,
+        yatsi: document.getElementById('vakit-yatsi')?.innerText
+    };
+
+    const simdi = new Date();
+    let hedefVakit = null;
+    let hedefIsmi = "";
+
+    // İftar (Akşam) vakti kontrolü
+    if (vakitler.aksam) {
+        hedefVakit = timeStringToDate(vakitler.aksam);
+        hedefIsmi = "İftar (Akşam)";
+        
+        // Eğer iftar geçtiyse sahur (İmsak) vaktini hedefle (Ertesi gün)
+        if (simdi > hedefVakit && vakitler.imsak) {
+            hedefVakit = timeStringToDate(vakitler.imsak);
+            hedefVakit.setDate(hedefVakit.getDate() + 1);
+            hedefIsmi = "Sahur (İmsak)";
+        }
+    }
+
+    if (hedefVakit) {
+        const fark = hedefVakit - simdi;
+        if (fark > 0) {
+            sayacEl.innerText = formatCountdown(fark);
+        } else {
+            sayacEl.innerText = "00:00:00";
+        }
+    }
+}

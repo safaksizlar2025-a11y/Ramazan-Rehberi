@@ -4,6 +4,7 @@ from .data import AYETLER_LISTESI, HADISLER_LISTESI
 from datetime import date,datetime
 import requests
 from .utils import gunun_ayeti_getir
+from datetime import datetime, timedelta
 
 # Yardımcı Fonksiyon: Şehir-Ülke eşleşmesi
 def ulke_bul(sehir):
@@ -35,20 +36,17 @@ def ana_sayfa(request):
     try:
         response = requests.get(url, timeout=5)
         if response.status_code == 200:
-            data = response.json().get('data', {}).get('timings', {})
+            vakitler = response.json().get('data', {}).get('timings', {})
             
-            # VAKİT DÜZELTME MERKEZİ
-            def vakit_duzelt(vakit_str, dakika):
-                t = datetime.strptime(vakit_str, "%H:%M")
-                return (t + timedelta(minutes=dakika)).strftime("%H:%M")
+            # Diyanet uyumu için düzeltmeler
+            fmt = "%H:%M"
+            def fix(t_str, mins):
+                return (datetime.strptime(t_str, fmt) + timedelta(minutes=mins)).strftime(fmt)
 
-            # Senin gözlemlerine göre tam ayarlar:
-            data['Imsak'] = vakit_duzelt(data['Imsak'], 10)   # 06:06 -> 06:16
-            data['Asr'] = vakit_duzelt(data['Asr'], 1)       # İkindi 1 dk ileri
-            data['Maghrib'] = vakit_duzelt(data['Maghrib'], -1) # Akşam 1 dk geri
-            data['Isha'] = vakit_duzelt(data['Isha'], -1)    # Yatsı 1 dk geri
-            
-            vakitler = data
+            vakitler['Imsak'] = fix(vakitler['Imsak'], 10)   # 06:06 -> 06:16
+            vakitler['Asr'] = fix(vakitler['Asr'], 1)       # İkindi +1 dk
+            vakitler['Maghrib'] = fix(vakitler['Maghrib'], -1) # Akşam -1 dk
+            vakitler['Isha'] = fix(vakitler['Isha'], -1)    # Yatsı -1 dk
     except Exception as e:
         vakitler = None
 
