@@ -4,15 +4,16 @@
 
 {% block extra_css %}
 <style>
-    *,
-    *::after,
-    *::before {
+    .flower-page-bg,
+    .flower-page-bg *,
+    .flower-page-bg *::after,
+    .flower-page-bg *::before {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
     }
 
-    :root {
+    .flower-page-bg {
     --dark-color: #000000;
     }
 
@@ -28,13 +29,10 @@
     }
 
     .night {
-    position: fixed;
-    left: 50%;
-    top: 0;
-    transform: translateX(-50%);
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    inset: 0;
     filter: blur(0.1vmin);
+    pointer-events: none;
     }
 
     .flowers {
@@ -760,7 +758,7 @@
     .flower__g-fr {
     position: absolute;
     bottom: -4vmin;
-    left: vmin;
+    left: 2vmin;
     transform-origin: bottom left;
     z-index: 10;
     animation: flower__g-fr-ans 2s linear infinite;
@@ -1195,6 +1193,17 @@
 
     .not-loaded * {
     animation-play-state: paused !important;
+    }
+
+    @media (max-width: 992px) {
+    .flower-page-bg {
+        min-height: 72vh;
+        padding: 30px 0;
+    }
+
+    .flowers {
+        transform: scale(0.62);
+    }
     }
 </style>
 {% endblock %}
