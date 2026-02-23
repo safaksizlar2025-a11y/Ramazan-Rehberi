@@ -1,5 +1,8 @@
 import requests
 
+DEFAULT_AYET = {"metin": "Ramazan berekettir.", "kaynak": "Bakara 183"}
+
+
 def gunun_ayeti_getir(gun_no):
     # Kendi seçtiğin (Sure:Ayet) formatındaki liste
     ozel_ayetler = [
@@ -12,12 +15,14 @@ def gunun_ayeti_getir(gun_no):
     url = f"https://api.alquran.cloud/v1/ayah/{secili_adres}/tr.diyanet"
     
     try:
-        response = requests.get(url)
+        response = requests.get(url, timeout=5)
         if response.status_code == 200:
             data = response.json()
             return {
                 "metin": data['data']['text'],
                 "kaynak": f"{data['data']['surah']['englishName']} - {data['data']['numberInSurah']}"
             }
-    except:
-        return {"metin": "Ramazan berekettir.", "kaynak": "Bakara 183"}
+    except (requests.RequestException, ValueError, KeyError, TypeError):
+        return DEFAULT_AYET
+
+    return DEFAULT_AYET

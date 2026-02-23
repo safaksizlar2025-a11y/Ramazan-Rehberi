@@ -45,14 +45,6 @@ function formatCountdown(ms) {
     return `${hh}:${mm}:${ss}`;
 }
 
-function getImsakStartMinutes() {
-    const imsakEl = document.querySelector("#vakit-Fajr .vakit-saat");
-    const parsed = parseTimeString(imsakEl ? imsakEl.textContent.trim() : "");
-
-    if (!parsed) return 5 * 60;
-    return parsed.hours * 60 + parsed.minutes;
-}
-
 function sayaciGuncelle(vakitler) {
     if (!vakitler) return;
 
@@ -239,64 +231,33 @@ function type() {
     typeStep();
 }
 
-// Zamanı Date objesine çevirmek için yardımcı (HH:mm formatı için)
-function getVakitDate(timeStr, addsDay = 0) {
-    const [hours, minutes] = timeStr.split(':').map(Number);
-    const date = new Date();
-    date.setDate(date.getDate() + addsDay);
-    date.setHours(hours, minutes, 0, 0);
-    return date;
-}
-
-// Saniyeyi HH:MM:SS formatına çevirir
-function formatTime(ms) {
-    const totalSeconds = Math.floor(ms / 1000);
-    const h = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
-    const m = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
-    const s = (totalSeconds % 60).toString().padStart(2, '0');
-    return `${h}:${m}:${s}`;
-}
-
 function akilliSayac() {
-    const sayacEl = document.getElementById('sayac');
-    if (!sayacEl) return;
-
     // Vakitleri HTML id'lerinden çekiyoruz
     const vakitler = {
-        imsak: document.getElementById('vakit-imsak-deger')?.innerText.trim(),
-        ogle: document.getElementById('vakit-ogle-deger')?.innerText.trim(),
-        ikindi: document.getElementById('vakit-ikindi-deger')?.innerText.trim(),
-        aksam: document.getElementById('vakit-aksam-deger')?.innerText.trim(),
-        yatsi: document.getElementById('vakit-yatsi-deger')?.innerText.trim()
+        imsak: document.getElementById("vakit-imsak-deger")?.innerText.trim(),
+        aksam: document.getElementById("vakit-aksam-deger")?.innerText.trim(),
+        yatsi: document.getElementById("vakit-yatsi-deger")?.innerText.trim()
     };
 
-    const simdi = new Date();
-    let hedefVakit = null;
-    let hedefIsmi = "";
-
-    if (!vakitler.imsak || !vakitler.aksam) return;
-
-    // İftar (Akşam) vakti kontrolü
-    if (vakitler.aksam) {
-        hedefVakit = timeStringToDate(vakitler.aksam);
-        hedefIsmi = "İftar (Akşam)";
-        
-        // Eğer iftar geçtiyse sahur (İmsak) vaktini hedefle (Ertesi gün)
-        if (simdi > hedefVakit && vakitler.imsak) {
-            hedefVakit = timeStringToDate(vakitler.imsak);
-            hedefVakit.setDate(hedefVakit.getDate() + 1);
-            hedefIsmi = "Sahur (İmsak)";
-        }
-    }
-
-    if (hedefVakit) {
-        const fark = hedefVakit - simdi;
-        if (fark > 0) {
-            sayacEl.innerText = formatCountdown(fark);
-        } else {
-            sayacEl.innerText = "00:00:00";
-        }
-    }
-
+    if (!vakitler.imsak || !vakitler.aksam || !vakitler.yatsi) return;
     sayaciGuncelle(vakitler);
 }
+
+function initAnaSayfa() {
+    const sayacEl = document.getElementById("sayac");
+    if (!sayacEl || sayacEl.dataset.initialized === "1") return;
+
+    sayacEl.dataset.initialized = "1";
+
+    akilliSayac();
+    aktifVaktiGuncelle();
+
+    window.setInterval(akilliSayac, 1000);
+    window.setInterval(aktifVaktiGuncelle, 60000);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    initTheme();
+    type();
+    initAnaSayfa();
+});

@@ -1,10 +1,8 @@
 from django.shortcuts import render
-from .models import Ayet, Hadis
-from .data import AYETLER_LISTESI, HADISLER_LISTESI
-from datetime import date,datetime
+from .data import HADISLER_LISTESI
+from datetime import date, datetime, timedelta
 import requests
 from .utils import gunun_ayeti_getir
-from datetime import datetime, timedelta
 
 # Yardımcı Fonksiyon: Şehir-Ülke eşleşmesi
 def ulke_bul(sehir):
@@ -33,6 +31,7 @@ def ana_sayfa(request):
     # method=13 (Diyanet), school=1 (Hanefi)
     url = f"http://api.aladhan.com/v1/timingsByCity?city={sehir}&country={ulke}&method=13"
     
+    vakitler = None
     try:
         response = requests.get(url, timeout=5)
         if response.status_code == 200:
@@ -47,7 +46,7 @@ def ana_sayfa(request):
             vakitler['Asr'] = fix(vakitler['Asr'], 1)       # İkindi +1 dk
             vakitler['Maghrib'] = fix(vakitler['Maghrib'], -1) # Akşam -1 dk
             vakitler['Isha'] = fix(vakitler['Isha'], -1)    # Yatsı -1 dk
-    except Exception as e:
+    except (requests.RequestException, ValueError):
         vakitler = None
 
     context = {
@@ -63,13 +62,6 @@ def imsakiye_sayfasi(request):
     sehir = request.GET.get('sehir', 'Istanbul')
     ulke = ulke_bul(sehir)
 
-    # Ay isimleri dönüşüm sözlüğü
-    aylar_tr = {
-        "Feb": "Şubat",
-        "Mar": "Mart",
-        "Apr": "Nisan"
-    }
-    
     ramazan_aylari = [2, 3] 
     imsakiye_listesi = []
     
@@ -112,8 +104,7 @@ def imsakiye_sayfasi(request):
                         'yatsı': fix_time(timings['Isha'], -1),    # -1 dk düzeltme
                         'is_today': gun_obj == date.today()
                     })
-        except Exception as e: 
-            print(f"Hata oluştu: {e}")
+        except (requests.RequestException, ValueError, KeyError): 
             continue
     return render(request, 'core/imsakiye.html', {'imsakiye': imsakiye_listesi, 'sehir': sehir})
 
