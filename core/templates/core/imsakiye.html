@@ -15,6 +15,14 @@
                 Hicri 1447
             </span>
         </div>
+        <form method="get" class="imsakiye-sehir-form mt-4">
+            <label for="sehir" class="form-label fw-semibold mb-2">Sehir Sec</label>
+            <select id="sehir" name="sehir" class="form-select form-select-lg" onchange="this.form.submit()">
+                {% for il in sehirler %}
+                <option value="{{ il }}" {% if sehir == il %}selected{% endif %}>{{ il }}</option>
+                {% endfor %}
+            </select>
+        </form>
         <p class="lead mt-4 opacity-75 mx-auto" style="max-width: 700px;">
             Şehrinize ait günlük namaz ve iftar vakitlerini aşağıdan takip edebilir, 
             Ramazan ayı boyunca planlamalarınızı yapabilirsiniz.
@@ -132,6 +140,25 @@
     /* Animasyonlar */
     .animate-slide-up {
         animation: slideUp 0.8s ease-out;
+    }
+
+    .imsakiye-sehir-form {
+        max-width: 420px;
+        margin: 0 auto;
+        text-align: left;
+    }
+
+    .imsakiye-sehir-form .form-select {
+        border-radius: 14px;
+        background: var(--card-bg);
+        color: var(--text-color);
+        border: 1px solid var(--nav-border);
+        box-shadow: none;
+    }
+
+    .imsakiye-sehir-form .form-select:focus {
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.2);
     }
 
     @keyframes slideUp {
