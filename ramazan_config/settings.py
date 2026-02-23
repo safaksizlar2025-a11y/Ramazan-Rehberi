@@ -115,8 +115,14 @@ USE_I18N = True
 
 USE_TZ = True
 
-# settings.py en altına ekle
 STATIC_URL = '/static/'
+# Railway için dosyaların toplanacağı yer
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'core/static')] # Statik dosyalarının gerçek yolu
+
+# Django'nun kendi dosyalarını arayacağı yer (core klasörünün içindeki static)
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'core/static'),
+]
+
+# Whitenoise ayarı (Dosyaları sıkıştırıp sunar)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
