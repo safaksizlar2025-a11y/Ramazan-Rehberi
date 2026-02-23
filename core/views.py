@@ -30,25 +30,26 @@ def ana_sayfa(request):
 
     # GÜNCELLEME: Method 13'e ek olarak Turkey/Diyanet spesifik parametreler ekledik
     # method=13 (Diyanet), school=1 (Hanefi)
-    url = f"http://api.aladhan.com/v1/timingsByCity?city={sehir}&country={ulke}&method=13&school=1"
+    url = f"http://api.aladhan.com/v1/timingsByCity?city={sehir}&country={ulke}&method=13"
     
-    vakitler = {}
     try:
         response = requests.get(url, timeout=5)
         if response.status_code == 200:
-            ham_vakitler = response.json().get('data', {}).get('timings', {})
+            data = response.json().get('data', {}).get('timings', {})
             
-            # İmsak vaktindeki 10 dakikalık farkı düzeltmek için:
-            imsak_vakti = ham_vakitler.get('Imsak')
-            if imsak_vakti:
-                t = datetime.strptime(imsak_vakti, "%H:%M")
-                # Senin bildirdiğin 06:06 -> 06:16 düzeltmesi (+10 dakika)
-                duzeltilmis_imsak = (t + timedelta(minutes=10)).strftime("%H:%M")
-                ham_vakitler['Imsak'] = duzeltilmis_imsak
+            # VAKİT DÜZELTME MERKEZİ
+            def vakit_duzelt(vakit_str, dakika):
+                t = datetime.strptime(vakit_str, "%H:%M")
+                return (t + timedelta(minutes=dakika)).strftime("%H:%M")
+
+            # Senin gözlemlerine göre tam ayarlar:
+            data['Imsak'] = vakit_duzelt(data['Imsak'], 10)   # 06:06 -> 06:16
+            data['Asr'] = vakit_duzelt(data['Asr'], 1)       # İkindi 1 dk ileri
+            data['Maghrib'] = vakit_duzelt(data['Maghrib'], -1) # Akşam 1 dk geri
+            data['Isha'] = vakit_duzelt(data['Isha'], -1)    # Yatsı 1 dk geri
             
-            vakitler = ham_vakitler
+            vakitler = data
     except Exception as e:
-        print(f"API Hatası: {e}")
         vakitler = None
 
     context = {
