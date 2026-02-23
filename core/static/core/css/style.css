@@ -834,3 +834,8 @@ body {
     transform: scale(1.1) !important;
     box-shadow: 0 0 10px var(--accent-color);
 }
+
+.main-nav {
+    z-index: 9999 !important; /* Animasyonun üzerine çıkmasını sağlar */
+    position: sticky !important;
+}
