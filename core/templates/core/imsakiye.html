@@ -1,0 +1,159 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="text-center mb-5 animate-fade-in">
+        <h1 class="display-3 fw-bold mb-3">
+            <span class="text-success">2026</span> Ramazan İmsakiyesi
+        </h1>
+        <div class="d-flex justify-content-center align-items-center gap-3">
+            <span class="badge bg-success rounded-pill px-4 py-2 fs-6 shadow-sm">
+                <i class="bi bi-geo-alt-fill"></i> {{ sehir }}
+            </span>
+            <span class="badge bg-warning text-dark rounded-pill px-4 py-2 fs-6 shadow-sm">
+                Hicri 1447
+            </span>
+        </div>
+        <p class="lead mt-4 opacity-75 mx-auto" style="max-width: 700px;">
+            Şehrinize ait günlük namaz ve iftar vakitlerini aşağıdan takip edebilir, 
+            Ramazan ayı boyunca planlamalarınızı yapabilirsiniz.
+        </p>
+    </div>
+
+    <div class="card ramazan-card glass-card shadow-lg border-0 overflow-hidden animate-slide-up">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover imsakiye-table mb-0 text-center">
+                    <thead>
+                        <tr>
+                            <th>Gün</th>
+                            <th>Tarih</th>
+                            <th>İmsak</th>
+                            <th>Güneş</th>
+                            <th>Öğle</th>
+                            <th>İkindi</th>
+                            <th class="highlight-col">İftar</th>
+                            <th>Yatsı</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for gun in imsakiye %}
+                        <tr class="{% if gun.is_today %}imsakiye-aktif{% endif %}">
+                            <td class="fw-bold">
+                                {% if gun.is_today %}
+                                    <span class="badge bg-success">Bugün</span>
+                                {% else %}
+                                    {{ forloop.counter }}. Gün
+                                {% endif %}
+                            </td>
+                            <td class="small">{{ gun.tarih }}</td>
+                            <td>{{ gun.imsak }}</td>
+                            <td>{{ gun.gunes }}</td>
+                            <td>{{ gun.ogle }}</td>
+                            <td>{{ gun.ikindi }}</td>
+                            <td class="fw-bold highlight-col">{{ gun.aksam }}</td>
+                            <td>{{ gun.yatsı }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* 1. KART VE ARKA PLAN */
+    .glass-card {
+        background: var(--card-bg) !important;
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--nav-border) !important;
+        border-radius: 20px;
+    }
+
+    /* 2. TABLO GENEL */
+    .imsakiye-table {
+        background: transparent !important;
+        margin-bottom: 0;
+        /* Siyah temada yazılar buradaki değişkenden beslenecek */
+        color: var(--text-color) !important;
+    }
+
+    .imsakiye-table thead th {
+        background: rgba(0, 0, 0, 0.05) !important;
+        color: var(--accent-color) !important;
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        border: none;
+        padding: 20px 10px;
+    }
+
+    [data-theme="dark"] .imsakiye-table thead th {
+        background: rgba(255, 255, 255, 0.05) !important;
+    }
+
+    /* 3. SATIR VE HÜCRELER */
+    .imsakiye-table td {
+        padding: 16px 10px;
+        vertical-align: middle;
+        border-bottom: 1px solid var(--nav-border) !important;
+        background: transparent !important;
+        color: inherit !important;
+    }
+
+    /* Zebra Satırlar */
+    [data-theme="light"] .imsakiye-table tbody tr:nth-child(even) {
+        background-color: rgba(0, 0, 0, 0.02) !important;
+    }
+    [data-theme="dark"] .imsakiye-table tbody tr:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.02) !important;
+    }
+
+    /* 4. BUGÜNÜN SATIRI (SARI VURGU) */
+    /* Kullanıcının istediği gibi her iki temada da sarı arka plan siyah yazı */
+    .imsakiye-aktif {
+        background-color: #ffc107 !important;
+        border-left: 5px solid var(--accent-color) !important;
+    }
+
+    .imsakiye-aktif td {
+        color: #212529 !important; /* Bugünün satırında yazı her zaman okunaklı siyah/koyu */
+        font-weight: 700;
+    }
+
+    /* 5. ÖZEL SÜTUN (İFTAR) */
+    .highlight-col {
+        color: #ffc107 !important;
+        background: rgba(255, 193, 7, 0.02);
+    }
+
+    /* Animasyonlar */
+    .animate-slide-up {
+        animation: slideUp 0.8s ease-out;
+    }
+
+    @keyframes slideUp {
+        from { transform: translateY(30px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+        .imsakiye-table { font-size: 0.85rem; }
+        .display-3 { font-size: 2.2rem; }
+    }
+</style>
+
+<script>
+    // Bugünün satırına otomatik odaklanma
+    document.addEventListener('DOMContentLoaded', function() {
+        const todayRow = document.querySelector('.imsakiye-aktif');
+        if (todayRow) {
+            setTimeout(() => {
+                todayRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 500);
+        }
+    });
+</script>
+{% endblock %}

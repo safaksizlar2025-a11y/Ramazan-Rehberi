@@ -1,0 +1,259 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="text-center mb-5 animate-fade-in">
+        <h1 class="display-4 fw-bold mb-2">Amel Defterim</h1>
+        <p class="lead opacity-75">Günlük ibadet ve zikirlerinizi buradan takip edebilirsiniz.</p>
+    </div>
+
+    <div class="glass-card p-4 mb-4 shadow-sm animate-slide-up">
+        <h3 class="fw-bold mb-3"><i class="bi bi-trophy me-2 text-warning"></i>Günün Zikir Görevleri</h3>
+        <div id="gorev-listesi" class="row g-3">
+            </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-5">
+            <div class="glass-card p-4 text-center h-100 shadow-sm animate-slide-up">
+                <h3 class="fw-bold mb-4"><i class="bi bi-fingerprint me-2 text-success"></i>Zikirmatik</h3>
+                
+                <div class="zikir-ekran mb-4">
+                    <div id="counter" class="display-counter">0</div>
+                    <div class="small opacity-50 text-uppercase" style="letter-spacing: 2px;">Toplam Zikir</div>
+                </div>
+
+                <div class="py-3">
+                    <button id="zikirBtn" class="zikir-btn border-0 shadow-lg">ÇEK</button>
+                </div>
+
+                <button id="openZikirReset" class="btn btn-link text-danger text-decoration-none opacity-75 mt-3">
+                    <i class="bi bi-arrow-counterclockwise"></i> Sayacı Sıfırla
+                </button>
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <div class="glass-card p-4 h-100 shadow-sm animate-slide-up" style="animation-delay: 0.1s;">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="fw-bold mb-0">
+                        <i class="bi bi-journal-check me-2 text-success"></i>Günlük İbadetler
+                    </h3>
+                    <button id="openIbadetReset" class="btn btn-sm btn-outline-danger rounded-pill px-3">
+                        <i class="bi bi-trash3 me-1"></i> Listeyi Temizle
+                    </button>
+                </div>
+                <ul class="list-group list-group-flush bg-transparent">
+                    <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent border-light border-opacity-10 py-3">
+                        <span><i class="bi bi-brightness-low me-2 text-warning"></i>Sabah Namazı</span>
+                        <input type="checkbox" class="custom-check" id="check-sabah">
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent border-light border-opacity-10 py-3">
+                        <span><i class="bi bi-brightness-high me-2 text-warning"></i>Öğle Namazı</span>
+                        <input type="checkbox" class="custom-check" id="check-ogle">
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent border-light border-opacity-10 py-3">
+                        <span><i class="bi bi-sun me-2 text-warning"></i>İkindi Namazı</span>
+                        <input type="checkbox" class="custom-check" id="check-ikindi">
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent border-light border-opacity-10 py-3">
+                        <span><i class="bi bi-sunset me-2 text-warning"></i>Akşam Namazı</span>
+                        <input type="checkbox" class="custom-check" id="check-aksam">
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent border-light border-opacity-10 py-3">
+                        <span><i class="bi bi-moon-stars me-2 text-warning"></i>Yatsı Namazı</span>
+                        <input type="checkbox" class="custom-check" id="check-yatsı">
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent border-light border-opacity-10 py-3">
+                        <span><i class="bi bi-stars me-2 text-info"></i>Teravih Namazı</span>
+                        <input type="checkbox" class="custom-check" id="check-teravih">
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent border-0 py-4">
+                        <span class="fw-bold"><i class="bi bi-book me-2 text-success"></i>Kuran-ı Kerim Okuma</span>
+                        <div class="d-flex align-items-center">
+                            <input type="number" id="input-kuran" class="form-control custom-input" placeholder="0" style="width: 80px;">
+                            <span class="ms-2 opacity-50 small">sayfa</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="resetModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-glass shadow-lg border-0" style="border-radius: 25px;">
+            <div class="modal-body text-center p-5">
+                <div class="display-1 text-danger mb-4">
+                    <i class="bi bi-exclamation-octagon"></i>
+                </div>
+                <h3 class="fw-bold mb-3">Veriler Silinsin mi?</h3>
+                <p class="opacity-75 mb-4">Tüm zikir geçmişiniz ve bugünkü ibaret kayıtlarınız temizlenecektir. Bu işlemi onaylıyor musunuz?</p>
+                <div class="d-flex gap-3 justify-content-center">
+                    <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">VAZGEÇ</button>
+                    <button type="button" id="confirmResetBtn" class="btn btn-danger rounded-pill px-4 fw-bold">EVET, TEMİZLE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // --- ELEMENTLER ---
+    const counterDisplay = document.getElementById('counter');
+    const zikirBtn = document.getElementById('zikirBtn');
+    const confirmResetBtn = document.getElementById('confirmResetBtn');
+    const resetModal = new bootstrap.Modal(document.getElementById('resetModal'));
+    const modalText = document.querySelector('#resetModal .opacity-75');
+    const bugun = new Date().toLocaleDateString(); // Örn: "22.02.2026"
+    const sonGirisTarihi = localStorage.getItem('sonGirisTarihi');
+
+    // --- OTOMATİK GÜN GEÇİŞİ TEMİZLİĞİ ---
+    if (sonGirisTarihi !== bugun) {
+        // Seçiciyi güncelledik: .custom-check olup ID'si 'gorev-' ile BAŞLAMAYANLAR
+        const ibadetInputs = document.querySelectorAll('.custom-check:not([id^="gorev-"]), .custom-input:not([id^="gorev-"])');
+        ibadetInputs.forEach(input => {
+            if (input.type === 'checkbox') input.checked = false;
+            else input.value = '';
+            localStorage.removeItem(input.id); // Hafızadan sil
+        });
+        
+        // Yeni tarihi kaydet
+        localStorage.setItem('sonGirisTarihi', bugun);
+        console.log("Yeni gün: Sadece ibadet listesi tazelendi, görevlere dokunulmadı.");
+    }
+
+    let resetMode = ""; // "zikir" veya "ibadet" olduğunu tutacak
+
+    // --- ZİKİRMATİK MANTIĞI ---
+    let count = localStorage.getItem('zikirCount') ? parseInt(localStorage.getItem('zikirCount')) : 0;
+    counterDisplay.innerText = count;
+
+    zikirBtn.addEventListener('click', () => {
+        count++;
+        counterDisplay.innerText = count;
+        localStorage.setItem('zikirCount', count);
+    });
+
+    // --- MODAL AÇMA MANTIKLARI ---
+    document.getElementById('openZikirReset').addEventListener('click', (e) => {
+        e.preventDefault();
+        resetMode = "zikir";
+        modalText.innerText = "Sadece zikir sayacınız sıfırlanacaktır. Emin misiniz?";
+        resetModal.show();
+    });
+
+    document.getElementById('openIbadetReset').addEventListener('click', (e) => {
+        e.preventDefault();
+        resetMode = "ibadet";
+        modalText.innerText = "Tüm ibadet işaretlemeleriniz ve Kuran sayfa sayısı temizlenecektir. Günlük zikir görevleriniz silinmez. Emin misiniz?";
+        resetModal.show();
+    });
+
+    // --- ONAY BUTONU (MODAL İÇİNDEKİ) ---
+    confirmResetBtn.addEventListener('click', () => {
+        if (resetMode === "zikir") {
+            count = 0;
+            counterDisplay.innerText = 0;
+            localStorage.removeItem('zikirCount');
+        } 
+        else if (resetMode === "ibadet") {
+            // DÜZELTME BURADA: Sadece görev olmayan inputları hedef alıyoruz
+            const ibadetInputs = document.querySelectorAll('.custom-check:not([id^="gorev-"]), .custom-input:not([id^="gorev-"])');
+            ibadetInputs.forEach(input => {
+                if (input.type === 'checkbox') input.checked = false;
+                else input.value = '';
+                localStorage.removeItem(input.id);
+            });
+        }
+        resetModal.hide();
+    });
+
+    // --- İBADET KAYIT VE YÜKLEME ---
+    const allInputs = document.querySelectorAll('.custom-check, .custom-input');
+    allInputs.forEach(input => {
+        const saved = localStorage.getItem(input.id);
+        if (saved !== null) {
+            if (input.type === 'checkbox') input.checked = (saved === 'true');
+            else input.value = saved;
+        }
+
+        input.addEventListener('change', () => {
+            const val = input.type === 'checkbox' ? input.checked : input.value;
+            localStorage.setItem(input.id, val);
+        });
+    });
+
+    // --- GÜNLÜK GÖREV SİSTEMİ ---
+    const zikirHavuzu = [
+        { ad: "Sübhanallah", hedef: 33 },
+        { ad: "Elhamdülillah", hedef: 33 },
+        { ad: "Allahü Ekber", hedef: 33 },
+        { ad: "La İlahe İllallah", hedef: 100 },
+        { ad: "Estagfirullah", hedef: 100 },
+        { ad: "Subhanallahi ve bihamdihi", hedef: 100 },
+        { ad: "Allahümme salli ala Muhammed", hedef: 100 },
+        { ad: "La havle vela kuvvete illa billah", hedef: 33 },
+        { ad: "Hasbünallahu ve ni'mel vekil", hedef: 100 }
+    ];
+
+    function gununGorevleriniGetir() {
+        const bugunTarih = new Date().toLocaleDateString();
+        let seed = bugunTarih.split('.').reduce((a, b) => parseInt(a) + parseInt(b), 0);
+        
+        let secilenler = [];
+        let kopyaHavuz = [...zikirHavuzu];
+        
+        for (let i = 0; i < 3; i++) {
+            let index = seed % kopyaHavuz.length;
+            secilenler.push(kopyaHavuz.splice(index, 1)[0]);
+            seed += 7;
+        }
+        return secilenler;
+    }
+
+    function gorevleriEkranaBas() {
+        const gorevler = gununGorevleriniGetir();
+        const listeDiv = document.getElementById('gorev-listesi');
+        const bugunTarih = new Date().toLocaleDateString();
+        listeDiv.innerHTML = '';
+
+        gorevler.forEach((gorev, index) => {
+            const tamamlandiMi = localStorage.getItem(`gorev-${index}-${bugunTarih}`);
+            
+            listeDiv.innerHTML += `
+                <div class="col-md-4">
+                    <div class="p-3 border rounded border-light border-opacity-10 text-center ${tamamlandiMi ? 'bg-success bg-opacity-25' : ''}" id="card-gorev-${index}">
+                        <div class="small opacity-50">Görev ${index + 1}</div>
+                        <div class="fw-bold my-1">${gorev.ad}</div>
+                        <div class="badge bg-light text-dark mb-2">${gorev.hedef} Adet</div>
+                        <br>
+                        <input type="checkbox" class="custom-check mx-auto" 
+                            id="gorev-${index}" ${tamamlandiMi ? 'checked' : ''} 
+                            onchange="gorevTamamla(this, ${index})">
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    window.gorevTamamla = function(el, index) {
+        const bugunTarih = new Date().toLocaleDateString();
+        const kart = document.getElementById(`card-gorev-${index}`);
+        
+        if(el.checked) {
+            localStorage.setItem(`gorev-${index}-${bugunTarih}`, 'true');
+            if (kart) kart.classList.add('bg-success', 'bg-opacity-25');
+        } else {
+            localStorage.removeItem(`gorev-${index}-${bugunTarih}`);
+            if (kart) kart.classList.remove('bg-success', 'bg-opacity-25');
+        }
+    }
+
+    gorevleriEkranaBas();
+});
+</script>
+{% endblock %}

@@ -1,0 +1,746 @@
+:root {
+    --bg-color: #f8f9fa;
+    --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    --card-bg: rgba(255, 255, 255, 0.9);
+    --text-color: #212529;
+    --accent-color: #198754;
+    --nav-bg-rgb: 255, 255, 255;
+    --nav-text: #212529;
+    --nav-bg: rgba(255, 255, 255, 0.9);
+    --nav-link-color: #333333; /* Işık modunda siyah yazı */
+    --nav-border: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] {
+    --bg-color: #121212;
+    --bg-gradient: linear-gradient(135deg, #1e1e2f 0%, #121212 100%);
+    --card-bg: rgba(30, 30, 30, 0.9);
+    /* Saf beyaz yerine daha yumuşak gri tonları */
+    --text-color: #ced4da; /* Genel metinler için */
+    --text-muted: #adb5bd; /* Daha az önemli yazılar için */
+    --accent-color: #2ecc71;
+    --nav-bg-rgb: 18, 18, 18;
+    --nav-text: #eeeeee;
+    --nav-bg: rgba(18, 18, 18, 0.9);
+    --nav-link-color: #ffffff; /* Karanlık modda beyaz yazı */
+    --nav-border: rgba(255, 255, 255, 0.1);
+}
+
+h1,
+h2,
+h3 {
+    font-family: 'Playfair Display', serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    background-image: var(--bg-gradient);
+    background-attachment: fixed;
+    color: var(--text-color);
+    transition: all 0.4s ease;
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes blink {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.ramazan-card {
+    background: var(--card-bg);
+    border: none;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    border-left: 5px solid var(--accent-color) !important;
+    animation: fadeInUp 0.8s ease backwards;
+}
+
+.ramazan-card:nth-child(1) {
+    animation-delay: 0.2s;
+}
+
+.ramazan-card:nth-child(2) {
+    animation-delay: 0.4s;
+}
+
+.ramazan-card h5,
+.ramazan-card p,
+.ramazan-card footer {
+    color: var(--text-color) !important;
+}
+
+.ramazan-card footer {
+    opacity: 0.8;
+}
+
+.ramazan-card:hover {
+    transform: translateY(-5px);
+}
+
+.bg-success #sayac,
+.bg-success h3,
+.bg-success p {
+    color: white !important;
+}
+
+.vakit-box {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 15px;
+    border: 1px solid rgba(127, 127, 127, 0.1);
+    font-weight: bold;
+    text-align: center;
+}
+
+#sayac {
+    font-family: 'Inter', sans-serif;
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+    letter-spacing: 2px;
+}
+
+.theme-switch {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    font-size: 1.5rem;
+    z-index: 1000;
+}
+
+.location-picker {
+    background: var(--card-bg);
+    border-radius: 50px;
+    padding: 5px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(15px);
+    transition: all 0.3s ease;
+}
+
+.location-picker:hover {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    transform: scale(1.02);
+}
+
+[data-theme="dark"] .location-picker {
+    background: rgba(45, 45, 60, 0.8);
+}
+
+.input-group-custom {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.input-icon {
+    font-size: 1.2rem;
+    margin-right: 10px;
+}
+
+.city-select {
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    padding: 12px 10px;
+    width: 100%;
+    font-weight: 600;
+    cursor: pointer;
+    appearance: none;
+    outline: none;
+    box-shadow: none;
+}
+
+.city-select:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.city-select option {
+    background-color: #ffffff;
+    color: #212529;
+    padding: 10px;
+}
+
+[data-theme="dark"] .city-select option {
+    background-color: #1e1e2f;
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .city-select {
+    color-scheme: dark;
+}
+
+[data-theme="light"] .city-select {
+    color-scheme: light;
+}
+
+.select-arrow {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid var(--accent-color);
+    position: absolute;
+    right: 10px;
+    pointer-events: none;
+}
+
+.cursor {
+    display: inline-block;
+    width: 3px;
+    height: 1.2em;
+    background-color: var(--accent-color);
+    margin-left: 5px;
+    animation: blink 0.7s infinite;
+    vertical-align: middle;
+    border: none !important;
+}
+
+.progress {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.shadow-glow {
+    box-shadow: 0 0 15px rgba(255, 193, 7, 0.6);
+    border-radius: 10px;
+}
+
+#typewriter-text {
+    background: linear-gradient(45deg, var(--accent-color), #ffc107);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
+.main-timer-card {
+    background: linear-gradient(145deg, #198754, #145c32) !important;
+    overflow: hidden;
+    position: relative;
+    border-left: none !important;
+}
+
+.main-timer-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.timer-label {
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.bg-black-opacity {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.location-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: white;
+}
+
+.vakit-konteyner {
+    perspective: 1000px;
+}
+
+.vakit-kart {
+    background: var(--card-bg);
+    border-radius: 15px;
+    padding: 15px 10px;
+    text-align: center;
+    border: 1px solid rgba(127, 127, 127, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.vakit-ad {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.7;
+    font-weight: 700;
+}
+
+.vakit-saat {
+    font-size: 1.2rem;
+    font-weight: 800;
+    font-family: 'Inter', sans-serif;
+}
+
+.aktif-vakit {
+    background: var(--accent-color) !important;
+    color: white !important;
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    border: none;
+}
+
+.aktif-vakit .vakit-ad {
+    opacity: 0.9;
+}
+
+.vakit-kart:hover:not(.aktif-vakit) {
+    background: rgba(127, 127, 127, 0.05);
+    transform: translateY(-3px);
+}
+
+.spiritual-panel {
+    position: relative;
+    padding: 60px 40px;
+    border-radius: 30px;
+    overflow: hidden;
+    color: white;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.ayet-panel {
+    background: linear-gradient(135deg, #145c32 0%, #0a2e1a 100%);
+}
+
+.hadis-panel {
+    background: linear-gradient(135deg, #1e3a5f 0%, #0d1b2a 100%);
+}
+
+.panel-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.1;
+    background-image: url('https://www.transparenttextures.com/patterns/islamic-art.png');
+    pointer-events: none;
+}
+
+.panel-content {
+    position: relative;
+    z-index: 2;
+}
+
+.panel-subtitle {
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    font-size: 0.8rem;
+    margin-bottom: 20px;
+    color: var(--accent-color);
+}
+
+.panel-text {
+    font-family: 'Playfair Display', serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: 1.8rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.panel-divider {
+    width: 60px;
+    height: 3px;
+    background: var(--accent-color);
+    margin: 25px auto;
+    border-radius: 2px;
+}
+
+.panel-source {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.spiritual-panel:hover {
+    transform: translateY(-5px);
+}
+
+.glass-nav {
+    background: rgba(18, 18, 18, 0.8) !important;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 15px 0;
+}
+
+[data-theme="light"] .glass-nav {
+    background: rgba(255, 255, 255, 0.8) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.main-nav {
+    background: var(--nav-bg) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--nav-border);
+    transition: background 0.3s ease;
+}
+
+.nav-link {
+    color: var(--nav-link-color) !important;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: var(--accent-color) !important; /* Başarılı yeşil rengin */
+}
+
+/* Tema Butonu Stili */
+.theme-btn {
+    border: none;
+    background: rgba(128, 128, 128, 0.1);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--nav-link-color);
+}
+
+.nav-custom-links .nav-link {
+    color: var(--nav-text) !important;
+    font-weight: 500;
+    padding: 10px 15px !important;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.nav-custom-links .nav-link:hover {
+    background: rgba(25, 135, 84, 0.1);
+    color: var(--bs-success) !important;
+}
+
+.nav-custom-links .nav-link.active {
+    color: var(--bs-success) !important;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.tiny-badge {
+    font-size: 0.65rem;
+    padding: 2px 6px;
+    background: #ffc107; /* Sarı arka plan */
+    color: #000000 !important; /* Yazı rengini her iki temada da siyah yapar */
+    border-radius: 6px;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+.disabled-link {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Logo ve Ramazan Yazısı Renk Ayarı */
+.navbar-brand {
+    color: var(--nav-link-color) !important; /* Tema değiştikçe siyah/beyaz otomatik döner */
+}
+
+/* Eğer 'Ramazan' kelimesi özel bir span içindeyse */
+.navbar-brand span:not(.text-success) {
+    color: var(--nav-link-color) !important;
+}
+
+/* Yeşil olan kısmın (Rehberi veya simge) rengini korumak için */
+.text-success {
+    color: var(--accent-color) !important; /* */
+}
+
+
+/* Glassmorphism Ana Kart Yapısı */
+.glass-card {
+    background: var(--card-bg) !important;
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* Glass Card İçindeki Liste Elemanlarını Şeffaf Yap */
+.glass-card .list-group-item {
+    background: transparent !important;
+    color: var(--text-color);
+    border-bottom: 1px solid rgba(128, 128, 128, 0.1);
+    padding: 15px 0;
+}
+
+/* Zikirmatik Sayacı İçin Özel Ekran Tasarımı */
+.counter-screen {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px 0;
+    font-family: 'Digital-7', 'Courier New', monospace; /* Eğer varsa dijital font */
+    box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
+}
+
+[data-theme="dark"] .counter-screen {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Checkbox'ı tamamen özelleştirme */
+.custom-check {
+    width: 26px;
+    height: 26px;
+    background-color: rgba(128, 128, 128, 0.1);
+    border: 2px solid var(--accent-color);
+    border-radius: 8px; /* Hafif yuvarlak köşeler */
+    appearance: none; /* Standart görünümü kaldır */
+    -webkit-appearance: none;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Seçildiğinde arka plan rengi */
+.custom-check:checked {
+    background-color: var(--accent-color);
+    box-shadow: 0 0 15px rgba(25, 135, 84, 0.4);
+}
+
+/* Seçildiğinde içindeki 'Tik' işareti */
+.custom-check:checked::after {
+    content: '\F26E'; /* Bootstrap Icons - check işareti */
+    font-family: 'bootstrap-icons';
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Üzerine gelince parlama efekti */
+.custom-check:hover {
+    transform: scale(1.1);
+    background-color: rgba(25, 135, 84, 0.1);
+}
+
+/* Modern Sayı Girişi (Input) Tasarımı */
+.custom-input {
+    background: rgba(128, 128, 128, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 10px !important;
+    color: var(--text-color) !important;
+    padding: 8px 12px;
+    text-align: center;
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
+
+/* Input'a tıklandığında (Focus) olacaklar */
+.custom-input:focus {
+    background: rgba(25, 135, 84, 0.1) !important;
+    border-color: var(--accent-color) !important;
+    box-shadow: 0 0 15px rgba(25, 135, 84, 0.2) !important;
+    outline: none;
+    transform: translateY(-2px);
+}
+
+/* Sayı artırma oklarını biraz daha kibar yapalım veya gizleyelim (isteğe bağlı) */
+.custom-input::-webkit-inner-spin-button, 
+.custom-input::-webkit-outer-spin-button {
+    opacity: 0.5;
+}
+
+/* Zikirmatik Dijital Ekran */
+.zikir-ekran {
+    background: rgba(0, 0, 0, 0.2) !important;
+    border: 2px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 30px 10px;
+    margin: 20px 0;
+    position: relative;
+    box-shadow: inset 0 5px 15px rgba(0,0,0,0.3);
+    overflow: hidden;
+}
+
+/* Sayıların Işıklı Görünümü */
+.display-counter {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-weight: 800;
+    font-size: 4rem !important;
+    color: var(--accent-color);
+    text-shadow: 0 0 15px rgba(46, 204, 113, 0.4);
+    letter-spacing: 2px;
+}
+
+/* Zikir Butonu (Büyük ve Basılabilir) */
+.zikir-btn {
+    width: 120px;
+    height: 120px;
+    border-radius: 50% !important;
+    border: 8px solid rgba(0,0,0,0.1) !important;
+    background: linear-gradient(145deg, var(--accent-color), #27ae60);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2), 
+                inset 0 -5px 10px rgba(0,0,0,0.2);
+    transition: all 0.1s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    color: white !important;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.zikir-btn:active {
+    transform: scale(0.92);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+}
+
+/* Özel Onay Modalı Tasarımı */
+.modal-glass {
+    background: rgba(var(--bg-rgb), 0.8) !important;
+    backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 25px !important;
+    color: var(--text-color);
+}
+
+.modal-backdrop.show {
+    backdrop-filter: blur(5px);
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#openIbadetReset {
+    border-color: rgba(220, 53, 69, 0.3); /* Kırmızı kenarlığı biraz şeffaf yap */
+    font-size: 0.75rem; /* Biraz daha kibar bir boyut */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+#openIbadetReset:hover {
+    background-color: rgba(220, 53, 69, 0.1);
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+[data-theme="light"] {
+    /* ... Mevcut beyaz tema ayarların burada kalacak ... */
+
+    /* Amel Defteri Kartları (Glass Card) */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.7) !important; /* Biraz daha opak beyaz */
+        border: 1px solid rgba(0, 0, 0, 0.125) !important; /* İnce gri kenarlık */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important; /* Hafif koyu gölge */
+    }
+
+    /* Zikirmatik Ekranı */
+    .zikir-ekran {
+        background: rgba(0, 0, 0, 0.03) !important;
+        border-color: rgba(0, 0, 0, 0.1) !important;
+        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05) !important;
+    }
+
+    /* Zikirmatik Sayıları */
+    .display-counter {
+        text-shadow: none !important; /* Beyaz temada parlama efektini kapatalım */
+        color: var(--accent-color) !important; /* Ana vurgu rengini kullansın */
+    }
+
+    /* Zikirmatik Butonu */
+    .zikir-btn {
+        border-color: rgba(0, 0, 0, 0.05) !important;
+        box-shadow: 0 8px 16px rgba(46, 204, 113, 0.3) !important; /* Buton renginde gölge */
+    }
+    
+    /* İbadet Listesi Çizgileri */
+    .list-group-item.border-light {
+        border-color: rgba(0, 0, 0, 0.1) !important;
+    }
+
+    /* Günlük Görev Kartları */
+    #gorev-listesi .border-light {
+        border-color: rgba(0, 0, 0, 0.1) !important; /* Beyaz yerine ince gri çizgi */
+        background-color: rgba(255, 255, 255, 0.5) !important;
+    }
+
+    /* Görevler içindeki küçük yazılar ve başlıklar */
+    #gorev-listesi .small.opacity-50 {
+        color: #6c757d !important; /* Çok soluk gri yerine daha okunaklı gri */
+        opacity: 0.8 !important;
+    }
+
+    /* Tamamlanmış görevlerin yeşil arka planı (Beyaz temada daha canlı görünmesi için) */
+    #gorev-listesi .bg-success.bg-opacity-25 {
+        background-color: rgba(25, 135, 84, 0.15) !important; /* Hafif koyulaştırılmış yeşil */
+        border-color: rgba(25, 135, 84, 0.3) !important;
+    }
+
+    /* Görevlerin içindeki badge (Adet kısmı) */
+    #gorev-listesi .badge.bg-light {
+        background-color: #f1f3f5 !important; /* Tam beyaz yerine çok açık gri */
+        color: #212529 !important;
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+}
+
+/* --- MOBİL NAVIGASYON DÜZENLEMESİ --- */
+
+/* Karanlık temada hamburger menü çizgi rengini beyaza çekiyoruz */
+[data-theme="dark"] .navbar-toggler-icon {
+    filter: invert(1) brightness(1.5); /* Siyah olan ikonu beyaza çevirir */
+}
+
+/* Karanlık temada butonu çerçevesini biraz daha belirgin yapalım */
+[data-theme="dark"] .navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Tıklandığında oluşan o mavi gölgeyi (focus) senin yeşil rengine uyarlayalım */
+.navbar-toggler:focus {
+    box-shadow: 0 0 0 0.25rem rgba(46, 204, 113, 0.25);
+}
+
+/* Mobil menü açıldığında linklerin arka planı çok düz durmasın diye */
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        background: var(--nav-bg);
+        margin-top: 10px;
+        padding: 15px;
+        border-radius: 15px;
+        border: 1px solid var(--nav-border);
+    }
+}
