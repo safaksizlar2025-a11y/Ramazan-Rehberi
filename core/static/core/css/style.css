@@ -836,6 +836,22 @@ body {
 }
 
 .main-nav {
-    z-index: 9999 !important; /* Animasyonun üzerine çıkmasını sağlar */
+    z-index: 9999 !important;
     position: sticky !important;
+    top: 0;
+}
+
+.nav-e-link .e-sigil {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 24px !important;
+    height: 24px !important;
+    background: var(--accent-color) !important;
+    color: white !important;
+    border-radius: 6px !important;
+    font-weight: bold;
+    font-size: 14px;
+    margin-right: 8px;
+    position: relative !important;
 }
