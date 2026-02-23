@@ -79,8 +79,8 @@ def imsakiye_sayfasi(request):
                     gun_tarihi_str = gun['date']['gregorian']['date']
                     gun_obj = datetime.strptime(gun_tarihi_str, '%d-%m-%Y').date()
                     
-                    # 18 Şubat'tan öncesini ve 19 Mart'tan sonrasını ele
-                    if gun_obj < date(2026, 2, 18) or gun_obj > date(2026, 3, 19):
+                    # 19 Şubat'tan öncesini ve 19 Mart'tan sonrasını ele
+                    if gun_obj < date(2026, 2, 19) or gun_obj > date(2026, 3, 19):
                         continue
 
                     # --- SAAT DÜZELTME BÖLÜMÜ ---
